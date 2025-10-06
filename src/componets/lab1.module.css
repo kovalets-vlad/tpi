@@ -1,0 +1,103 @@
+.wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 3rem 1rem;
+}
+
+.container {
+    width: 100%;
+    max-width: 56rem;
+}
+
+.headerRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+.subtitle {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.card {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.04);
+}
+
+.form {
+    display: grid;
+    gap: 0.75rem;
+}
+.label {
+    font-size: 0.9rem;
+    color: #0f172a;
+    font-weight: 500;
+}
+.textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #e6eef7;
+    min-height: 100px;
+    font-size: 0.95rem;
+}
+.input {
+    width: 11rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid #e6eef7;
+}
+.error {
+    color: #dc2626;
+    font-size: 0.85rem;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.resultWrap {
+    margin-top: 1rem;
+}
+.resultTitle {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+.resultBox {
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    min-height: 72px;
+    box-shadow: 0 3px 10px rgba(2, 6, 23, 0.03);
+}
+.pre {
+    white-space: pre-wrap;
+    font-size: 0.9rem;
+}
+.hint {
+    color: #64748b;
+}
+
+.resultBox h4 {
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+.resultBox p {
+    margin: 5px 0;
+}
