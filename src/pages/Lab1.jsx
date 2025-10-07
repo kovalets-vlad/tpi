@@ -61,12 +61,12 @@ export default function Lab1() {
         }
     };
 
-    const handleTestGenerator = async (data) => {
+    // Обробка запиту для /test_generator
+    const handleTestGenerator = async () => {
         setErrorMessage("");
         setTestResult(null);
         try {
-            const n = data.testCount ? Number(data.testCount) : 10000;
-            const testData = await testGenerator(n);
+            const testData = await testGenerator();
             setTestResult(testData);
         } catch (err) {
             setErrorMessage(err.message || "Помилка при тестуванні генератора");
@@ -118,6 +118,7 @@ export default function Lab1() {
                             className={lab1Styles.input}
                         />
                         {errors.count && <p className={lab1Styles.error}>{errors.count.message}</p>}
+
                         <label className={lab1Styles.checkboxLabel}>
                             <input
                                 type="checkbox"
@@ -126,25 +127,6 @@ export default function Lab1() {
                             />
                             Завантажити результат як файл
                         </label>
-                        <label className={lab1Styles.label}>
-                            Кількість чисел для тесту π *Необов`язково стандартне значення 10000
-                        </label>
-                        <input
-                            type="text"
-                            {...register("testCount", {
-                                pattern: {
-                                    value: /^\d+$/,
-                                    message: "Введіть лише цифри",
-                                },
-                                min: {
-                                    value: 1,
-                                    message: "Введіть додатне число",
-                                },
-                            })}
-                            placeholder="Кількість чисел для тесту (наприклад, 10000)"
-                            className={lab1Styles.input}
-                        />
-                        {errors.testCount && <p className={lab1Styles.error}>{errors.testCount.message}</p>}
 
                         <div className={lab1Styles.actions}>
                             <button type="submit" className={globalStyles.primaryBtn}>
@@ -171,7 +153,7 @@ export default function Lab1() {
                             <ul className={lab1Styles.resultList}>
                                 {result.map((number, index) => (
                                     <li key={index} className={lab1Styles.resultItem}>
-                                        {index + 1}: {number.toFixed(6)}
+                                        {index + 1}: {Math.floor(number)}
                                     </li>
                                 ))}
                             </ul>
