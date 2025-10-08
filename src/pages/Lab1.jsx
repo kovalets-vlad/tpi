@@ -13,6 +13,40 @@ const createHeader = () => {
     return `MULTIPLIER=${MULTIPLIER}\nINCREASE=${INCREASE}\nCOMPARISON_MODULE=${COMPARISON_MODULE}\n\n`;
 };
 
+const saveFile = async (content, suggestedFileName) => {
+    if (!("showSaveFilePicker" in window)) {
+        const blob = new Blob([content], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = suggestedFileName;
+        a.click();
+        URL.revokeObjectURL(url);
+        return;
+    }
+
+    const options = {
+        suggestedName: suggestedFileName,
+        types: [
+            {
+                description: "Text Files",
+                accept: { "text/plain": [".txt"] },
+            },
+        ],
+    };
+
+    try {
+        const fileHandle = await window.showSaveFilePicker(options);
+        const writable = await fileHandle.createWritable();
+        await writable.write(content);
+        await writable.close();
+    } catch (err) {
+        if (err.name !== "AbortError") {
+            console.error("Error saving file:", err);
+        }
+    }
+};
+
 export default function Lab1() {
     const {
         register,
@@ -44,21 +78,12 @@ export default function Lab1() {
             const res = await random(requestData);
             console.log("Результат:", res);
 
-            if (isFileDownload) {
-                const defaultFileName = "random_numbers.txt";
-                const fileName = prompt("Введіть ім'я файлу:", defaultFileName);
-
-                if (fileName) {
-                    const fileContentWithHeader = createHeader() + res;
-                    const url = window.URL.createObjectURL(new Blob([fileContentWithHeader]));
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.download = fileName.endsWith(".txt") ? fileName : `${fileName}.txt`;
-                    document.body.appendChild(link);
-                    link.click();
-                    link.remove();
-                    window.URL.revokeObjectURL(url);
-                }
+            if (isFileDownload && res) {
+                const defaultFileName = "lcg_result.txt";
+                const header = createHeader();
+                const sequence = res.sequence || [];
+                const fileContent = header + sequence.join("\n");
+                await saveFile(fileContent, defaultFileName);
             } else {
                 setResult(res.sequence);
             }
@@ -89,24 +114,14 @@ export default function Lab1() {
         }
     };
 
-    const handleDownload = () => {
+    const handleDownload = async () => {
         if (!result) return;
         const defaultFileName = "lcg_result.txt";
-        const fileName = prompt("Введіть ім'я файлу:", defaultFileName);
-
-        if (!fileName) return;
-
         const header = createHeader();
         const fileContent = header + result.join("\n");
-
-        const blob = new Blob([fileContent], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = fileName.endsWith(".txt") ? fileName : `${fileName}.txt`;
-        a.click();
-        URL.revokeObjectURL(url);
+        await saveFile(fileContent, defaultFileName);
     };
+
     const handleClear = () => {
         reset();
         setResult(null);
