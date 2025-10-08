@@ -5,6 +5,14 @@ import { random, getPeriod, testGenerator } from "../api/Pseudo-RandomNumberGene
 import lab1Styles from "../componets/lab1.module.css";
 import globalStyles from "../componets/global.module.css";
 
+const MULTIPLIER = process.env.REACT_APP_MULTIPLIER || 3125;
+const INCREASE = process.env.REACT_APP_INCREASE || 3;
+const COMPARISON_MODULE = process.env.REACT_APP_COMPARISON_MODULE || 8191;
+
+const createHeader = () => {
+    return `MULTIPLIER=${MULTIPLIER}\nINCREASE=${INCREASE}\nCOMPARISON_MODULE=${COMPARISON_MODULE}\n\n`;
+};
+
 export default function Lab1() {
     const {
         register,
@@ -12,16 +20,20 @@ export default function Lab1() {
         formState: { errors },
         reset,
     } = useForm();
+
     const [result, setResult] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
     const [isFileDownload, setIsFileDownload] = useState(false);
     const [period, setPeriod] = useState(null);
     const [testResult, setTestResult] = useState(null);
+    const [showAll, setShowAll] = useState(false);
 
-    // Обробка форми для /random
     const onSubmit = async (data) => {
         setErrorMessage("");
         setResult(null);
+        setPeriod(null);
+        setTestResult(null);
+        setShowAll(false);
 
         try {
             const requestData = {
@@ -33,14 +45,20 @@ export default function Lab1() {
             console.log("Результат:", res);
 
             if (isFileDownload) {
-                const url = window.URL.createObjectURL(new Blob([res]));
-                const link = document.createElement("a");
-                link.href = url;
-                link.setAttribute("download", "random_numbers.txt");
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-                window.URL.revokeObjectURL(url);
+                const defaultFileName = "random_numbers.txt";
+                const fileName = prompt("Введіть ім'я файлу:", defaultFileName);
+
+                if (fileName) {
+                    const fileContentWithHeader = createHeader() + res;
+                    const url = window.URL.createObjectURL(new Blob([fileContentWithHeader]));
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = fileName.endsWith(".txt") ? fileName : `${fileName}.txt`;
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                }
             } else {
                 setResult(res.sequence);
             }
@@ -49,7 +67,6 @@ export default function Lab1() {
         }
     };
 
-    // Обробка запиту для /period
     const handleGetPeriod = async () => {
         setErrorMessage("");
         setPeriod(null);
@@ -61,7 +78,6 @@ export default function Lab1() {
         }
     };
 
-    // Обробка запиту для /test_generator
     const handleTestGenerator = async () => {
         setErrorMessage("");
         setTestResult(null);
@@ -73,7 +89,24 @@ export default function Lab1() {
         }
     };
 
-    // Очищення всіх полів
+    const handleDownload = () => {
+        if (!result) return;
+        const defaultFileName = "lcg_result.txt";
+        const fileName = prompt("Введіть ім'я файлу:", defaultFileName);
+
+        if (!fileName) return;
+
+        const header = createHeader();
+        const fileContent = header + result.join("\n");
+
+        const blob = new Blob([fileContent], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName.endsWith(".txt") ? fileName : `${fileName}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+    };
     const handleClear = () => {
         reset();
         setResult(null);
@@ -81,7 +114,10 @@ export default function Lab1() {
         setTestResult(null);
         setErrorMessage("");
         setIsFileDownload(false);
+        setShowAll(false);
     };
+
+    const visibleData = showAll ? result : result?.slice(0, 100);
 
     return (
         <div className={`${lab1Styles.wrap} ${globalStyles.pageBackground}`}>
@@ -149,23 +185,41 @@ export default function Lab1() {
                     <h3 className={lab1Styles.resultTitle}>Результат</h3>
                     <div className={lab1Styles.resultBox}>
                         {errorMessage && <p className={lab1Styles.error}>{errorMessage}</p>}
+
                         {result && !isFileDownload ? (
-                            <ul className={lab1Styles.resultList}>
-                                {result.map((number, index) => (
-                                    <li key={index} className={lab1Styles.resultItem}>
-                                        {index + 1}: {Math.floor(number)}
-                                    </li>
-                                ))}
-                            </ul>
+                            <div>
+                                <ul className={lab1Styles.resultList}>
+                                    {visibleData.map((number, index) => (
+                                        <li key={index} className={lab1Styles.resultItem}>
+                                            {index + 1}: {Math.floor(number)}
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                {result.length > 100 && (
+                                    <div className={lab1Styles.buttons}>
+                                        {!showAll && (
+                                            <button onClick={() => setShowAll(true)} className={globalStyles.ghostBtn}>
+                                                Показати всі ({result.length})
+                                            </button>
+                                        )}
+                                        <button onClick={handleDownload} className={globalStyles.primaryBtn}>
+                                            Завантажити TXT
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         ) : (
                             !errorMessage && <p className={lab1Styles.hint}>Результат з'явиться тут після виконання.</p>
                         )}
+
                         {period !== null && (
                             <div>
                                 <h4>Період LCG:</h4>
                                 <p>{period}</p>
                             </div>
                         )}
+
                         {testResult && (
                             <div>
                                 <h4>Тест генератора (Оцінка π):</h4>
