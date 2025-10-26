@@ -8,6 +8,8 @@ import globalStyles from "../componets/global.module.css";
 const MULTIPLIER = process.env.REACT_APP_MULTIPLIER || 3125;
 const INCREASE = process.env.REACT_APP_INCREASE || 3;
 const COMPARISON_MODULE = process.env.REACT_APP_COMPARISON_MODULE || 8191;
+const SHOW_MORE_CHUNK_SIZE = 10000;
+const INITIAL_VISIBLE_COUNT = 1000;
 
 const createHeader = () => {
     return `MULTIPLIER=${MULTIPLIER}\nINCREASE=${INCREASE}\nCOMPARISON_MODULE=${COMPARISON_MODULE}\n\n`;
@@ -60,14 +62,14 @@ export default function Lab1() {
     const [isFileDownload, setIsFileDownload] = useState(false);
     const [period, setPeriod] = useState(null);
     const [testResult, setTestResult] = useState(null);
-    const [showAll, setShowAll] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
 
     const onSubmit = async (data) => {
         setErrorMessage("");
         setResult(null);
         setPeriod(null);
         setTestResult(null);
-        setShowAll(false);
+        setVisibleCount(INITIAL_VISIBLE_COUNT);
 
         try {
             const requestData = {
@@ -129,10 +131,14 @@ export default function Lab1() {
         setTestResult(null);
         setErrorMessage("");
         setIsFileDownload(false);
-        setShowAll(false);
+        setVisibleCount(INITIAL_VISIBLE_COUNT);
     };
 
-    const visibleData = showAll ? result : result?.slice(0, 100);
+    const handleShowMore = () => {
+        setVisibleCount((prevCount) => Math.min(prevCount + SHOW_MORE_CHUNK_SIZE, result.length));
+    };
+
+    const visibleData = result?.slice(0, visibleCount);
 
     return (
         <div className={`${lab1Styles.wrap} ${globalStyles.pageBackground}`}>
@@ -203,6 +209,9 @@ export default function Lab1() {
 
                         {result && !isFileDownload ? (
                             <div>
+                                <p className={lab1Styles.hint}>
+                                    Показано: {visibleData.length} / {result.length}
+                                </p>
                                 <ul className={lab1Styles.resultList}>
                                     {visibleData.map((number, index) => (
                                         <li key={index} className={lab1Styles.resultItem}>
@@ -211,18 +220,16 @@ export default function Lab1() {
                                     ))}
                                 </ul>
 
-                                {result.length > 100 && (
-                                    <div className={lab1Styles.buttons}>
-                                        {!showAll && (
-                                            <button onClick={() => setShowAll(true)} className={globalStyles.ghostBtn}>
-                                                Показати всі ({result.length})
-                                            </button>
-                                        )}
-                                        <button onClick={handleDownload} className={globalStyles.primaryBtn}>
-                                            Завантажити TXT
+                                <div className={lab1Styles.buttons}>
+                                    {visibleCount < result.length && (
+                                        <button onClick={handleShowMore} className={globalStyles.ghostBtn}>
+                                            Показати ще {SHOW_MORE_CHUNK_SIZE}
                                         </button>
-                                    </div>
-                                )}
+                                    )}
+                                    <button onClick={handleDownload} className={globalStyles.primaryBtn}>
+                                        Завантажити TXT (всі {result.length})
+                                    </button>
+                                </div>
                             </div>
                         ) : (
                             !errorMessage && <p className={lab1Styles.hint}>Результат з'явиться тут після виконання.</p>
