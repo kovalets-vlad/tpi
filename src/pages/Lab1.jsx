@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { random, getPeriod, testGenerator } from "../api/Pseudo-RandomNumberGeneration";
+import { random, getPeriod, testGenerator } from "../api/pseudo-randomNumberGeneration";
 import lab1Styles from "../componets/lab1.module.css";
 import globalStyles from "../componets/global.module.css";
 

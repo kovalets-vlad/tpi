@@ -76,6 +76,16 @@
     color: #333;
 }
 
+/* --- НОВЕ: Змінено на input --- */
+.input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
 .textarea {
     width: 100%;
     min-height: 150px;
@@ -123,125 +133,21 @@
     margin-top: 1rem;
 }
 
-.resultWrap {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
-}
-
-.resultTitle {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    color: #333;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 1rem;
-}
-
-.resultBox {
-    min-height: 50px;
-}
-
 .error {
     color: #d93025;
     font-weight: 500;
     font-size: 0.9rem;
-    margin: 0;
+    margin: -0.5rem 0 0 0;
 }
 
 .hint {
     color: #888;
     font-style: italic;
-}
-
-.resultData {
-    font-family: "Courier New", Courier, monospace;
-    font-size: 1.1rem;
-    background: #f4f4f7;
-    padding: 1.5rem;
-    border-radius: 6px;
-    word-break: break-all;
-}
-
-.resultData p {
-    margin: 0.75rem 0;
-    display: flex;
-    flex-direction: column;
-}
-
-.resultData strong {
-    color: #333;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-}
-
-.resultData span {
-    color: #0056b3;
-}
-
-.resultActions {
-    margin-top: 1.5rem;
-    display: flex;
-}
-
-/* --- Додайте це в кінець lab2.module.css --- */
-
-/* Стилі для нової картки верифікації (аналогічно resultWrap) */
-.verificationWrap {
-    margin-top: 2rem;
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
-}
-
-.verificationTitle {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    color: #333;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 1rem;
-}
-
-.verificationBox {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-}
-
-.verificationInput {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-family: "Courier New", Courier, monospace;
-    box-sizing: border-box;
-}
-
-.verificationActions {
-    display: flex;
-}
-
-.comparisonResult {
     margin-top: 1rem;
-    min-height: 24px;
 }
 
-.match {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #28a745;
-    margin: 0;
-}
-
-.mismatch {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #d93025;
-    margin: 0;
+.textActions {
+    display: flex;
+    gap: 1rem;
+    margin-top: -0.5rem;
 }
