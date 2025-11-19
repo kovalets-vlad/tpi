@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Lab1 from "./pages/Lab1";
-import Lab2 from "./pages/Lab2";
-import Lab3 from "./pages/Lab3";
+import Home from "./pages/home";
+import Lab1 from "./pages/lab1";
+import Lab2 from "./pages/lab2";
+import Lab3 from "./pages/lab3";
 
 export default function App() {
     return (
