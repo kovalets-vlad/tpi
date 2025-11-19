@@ -1,6 +1,6 @@
 import { executeRequest } from "../utils/executeRequest";
 import axios from "./axios";
-import { triggerFileDownload } from "../utils/triggerFileDownload";
+import { triggerSaveAs } from "../utils/triggerSaveAs";
 
 export const encryptText = async (password, text) => {
     const requestData = { password, text };
@@ -38,7 +38,8 @@ export const encryptFile = async (password, file) => {
             responseType: "blob",
         });
 
-        triggerFileDownload(response);
+        await triggerSaveAs(response);
+
         return { success: true };
     } catch (err) {
         if (err.response && err.response.data && err.response.data.detail) {
@@ -52,13 +53,29 @@ export const decryptFile = async (password, file) => {
     const formData = new FormData();
     formData.append("password", password);
     formData.append("file", file);
-    formData.append("original_filename", file.name);
+
+    let originalName = file.name;
+
+    const lastDotIndex = originalName.lastIndexOf(".");
+
+    if (lastDotIndex !== -1) {
+        const namePart = originalName.substring(0, lastDotIndex);
+        const extPart = originalName.substring(lastDotIndex);
+
+        if (namePart.endsWith("_encrypted")) {
+            originalName = namePart.slice(0, -10) + extPart;
+        }
+    }
+
+    formData.append("original_filename", originalName);
 
     try {
         const response = await axios.post("/file/decrypt", formData, {
             responseType: "blob",
         });
-        triggerFileDownload(response);
+
+        await triggerSaveAs(response);
+
         return { success: true };
     } catch (err) {
         if (err.response && err.response.data && err.response.data.detail) {
@@ -66,4 +83,38 @@ export const decryptFile = async (password, file) => {
         }
         throw err;
     }
+};
+
+export const encryptTextToFile = async (password, text) => {
+    const requestData = { password, text };
+
+    try {
+        const response = await axios.post("/text-to-file/encrypt", requestData, {
+            responseType: "blob",
+        });
+
+        await triggerSaveAs(response);
+
+        return { success: true };
+    } catch (err) {
+        if (err.response && err.response.data && err.response.data.detail) {
+            throw new Error(err.response.data.detail);
+        }
+        throw err;
+    }
+};
+
+export const decryptFileToText = async (password, file) => {
+    const formData = new FormData();
+    formData.append("password", password);
+    formData.append("file", file);
+
+    return executeRequest(
+        () =>
+            axios.post("/file-to-text/decrypt", formData, {
+                responseType: "json",
+            }),
+        200,
+        "Success"
+    );
 };
