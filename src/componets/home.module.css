@@ -4,6 +4,14 @@
     color: #9aa7b2;
 }
 
+.title {
+    color: black;
+}
+
+.subtitle {
+    color: #0f172a;
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
