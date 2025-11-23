@@ -12,6 +12,7 @@ const getFilePickerOptions = (filename) => {
         zip: { description: "ZIP Archive", accept: { "application/zip": [".zip"] } },
         pem: { description: "PEM Key", accept: { "application/x-pem-file": [".pem"] } },
         pdf: { description: "PDF File", accept: { "file/pdf": [".pdf"] } },
+
     };
 
     const baseOptions = { suggestedName: filename };
