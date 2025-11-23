@@ -8,6 +8,10 @@ const getFilePickerOptions = (filename) => {
         jpeg: { description: "JPEG Image", accept: { "image/jpeg": [".jpg", ".jpeg"] } },
         webp: { description: "WebP Image", accept: { "image/webp": [".webp"] } },
         rc5: { description: "RC5 Encrypted File", accept: { "application/octet-stream": [".rc5"] } },
+        enc: { description: "RSA Encrypted File", accept: { "application/octet-stream": [".enc"] } },
+        zip: { description: "ZIP Archive", accept: { "application/zip": [".zip"] } },
+        pem: { description: "PEM Key", accept: { "application/x-pem-file": [".pem"] } },
+        pdf: { description: "PDF File", accept: { "file/pdf": [".pdf"] } },
     };
 
     const baseOptions = { suggestedName: filename };
