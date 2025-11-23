@@ -4,7 +4,7 @@ import axios from "./axios";
 export const random = async (data) => {
     return executeRequest(
         () =>
-            axios.post("/random", data, {
+            axios.post("/lcg/random", data, {
                 responseType: data.isFileDownload ? "blob" : "json",
             }),
         200,
@@ -13,9 +13,9 @@ export const random = async (data) => {
 };
 
 export const testGenerator = async (n = 10000) => {
-    return executeRequest(() => axios.post("/test_generator", n));
+    return executeRequest(() => axios.post("/lcg/test_generator", n));
 };
 
 export const getPeriod = async () => {
-    return executeRequest(() => axios.get("/period"));
+    return executeRequest(() => axios.get("/lcg/period"));
 };
