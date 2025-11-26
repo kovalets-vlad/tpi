@@ -7,11 +7,11 @@ import globalStyles from "../componets/global.module.css";
 export default function Home() {
     const labs = useMemo(
         () => [
-            { id: 1, title: "Лабораторна №1: ГПВЧ", path: "/lab1", desc: "Практична: генерація псевдоспадкових чисел" },
+            { id: 1, title: "Лабораторна №1: LCG", path: "/lab1", desc: "Практична: генерація псевдоспадкових чисел" },
             { id: 2, title: "Лабораторна №2: MD5", path: "/lab2", desc: "Хешування та перевірка цілісності" },
             { id: 3, title: "Лабораторна №3: RC5", path: "/lab3", desc: "Шифрування симетричним ключем" },
             { id: 4, title: "Лабораторна №4: RSA", path: "/lab4", desc: "Гібридне шифрування файлів" },
-            { id: 5, title: "Лабораторна №5:", path: "/lab3", desc: "" },
+            { id: 5, title: "Лабораторна №5: DSA", path: "/lab5", desc: "" },
         ],
         []
     );
