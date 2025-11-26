@@ -1,6 +1,7 @@
 import axios from "./axios";
 import { executeRequest } from "../utils/executeRequest";
 import { triggerSaveAs } from "../utils/triggerSaveAs";
+import { handleError } from "../utils/executeRequest";
 
 export const encryptText = async (password, text) => {
     const requestData = { password, text };
@@ -42,10 +43,7 @@ export const encryptFile = async (password, file) => {
 
         return { success: true };
     } catch (err) {
-        if (err.response && err.response.data && err.response.data.detail) {
-            throw new Error(err.response.data.detail);
-        }
-        throw err;
+        await handleError(err);
     }
 };
 
@@ -78,10 +76,7 @@ export const decryptFile = async (password, file) => {
 
         return { success: true };
     } catch (err) {
-        if (err.response && err.response.data && err.response.data.detail) {
-            throw new Error(err.response.data.detail);
-        }
-        throw err;
+        await handleError(err);
     }
 };
 
@@ -97,10 +92,7 @@ export const encryptTextToFile = async (password, text) => {
 
         return { success: true };
     } catch (err) {
-        if (err.response && err.response.data && err.response.data.detail) {
-            throw new Error(err.response.data.detail);
-        }
-        throw err;
+        await handleError(err);
     }
 };
 
